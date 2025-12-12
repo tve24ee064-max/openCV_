@@ -1,61 +1,65 @@
-# Task 5: Image Cartoonification
+# Task 4: Dino Game
 
 ## What I Learned
 
-- Bilateral filtering for edge-preserving smoothing
-- Edge detection using adaptive thresholding
-- Combining filtered images with masks
-- Understanding sigma parameters (spatial and range)
-- Creating artistic effects from photographs
+- Creating interactive applications with OpenCV
+- Implementing game physics (gravity, jumping)
+- Collision detection between shapes
+- Real-time rendering with numpy arrays
+- Handling user input for game controls
+- Drawing shapes: circles, rectangles, text
+- Game state management
 
 ## Files
 
-- `cartoonification.py` - Cartoon effect script
-- `cartoon_output1.jpg` - Cartoonified messi image
-- `cartoon_output2.jpg` - Cartoonified freedom image
+- `dinogame.py` - Main game script
+
+## Game Features
+
+- **Dino**: Green circle controlled by the player
+- **Obstacles**: Red vertical rectangles moving from right to left
+- **Score System**: Increments when obstacles are passed
+- **Game Over**: Displays when collision occurs
+- **Restart**: Press R to restart after game over
+
+## Controls
+
+- **SPACE** - Make the dino jump
+- **Q** - Quit the game
+- **R** - Restart after game over
 
 ## Key Concepts
 
-### Bilateral Filter
-Smooths colors while keeping edges sharp:
+### Physics
 ```python
-color = cv2.bilateralFilter(img, diameter, sigma_color, sigma_space)
-```
-- `sigma_s` (spatial): Controls blur radius
-- `sigma_r` (range): Controls color similarity threshold
-
-### Edge Detection
-```python
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-gray_blur = cv2.medianBlur(gray, 5)
-edges = cv2.adaptiveThreshold(gray_blur, 255, 
-                              cv2.ADAPTIVE_THRESH_MEAN_C, 
-                              cv2.THRESH_BINARY, 9, 5)
+jump_speed += gravity  # Applies gravity
+dino_y += jump_speed   # Updates position
 ```
 
-### Combining Images
+### Collision Detection
 ```python
-cartoon = cv2.bitwise_and(color, color, mask=edges)
+if (obstacle_x < dino_x + dino_radius and 
+    obstacle_x + obstacle_width > dino_x - dino_radius and
+    dino_y + dino_radius > ground_y + dino_radius - obstacle_height):
+    game_over = True
 ```
 
-## Alternative Techniques
+### Drawing Functions
+```python
+cv2.circle(frame, (x, y), radius, color, -1)  # Filled circle
+cv2.rectangle(frame, (x1, y1), (x2, y2), color, -1)  # Filled rectangle
+cv2.putText(frame, text, (x, y), font, size, color, thickness)  # Text
+```
 
-1. **K-Means Color Quantization** - Reduces number of colors
-2. **Pencil Sketch** - Creates sketch effect
-3. **Stylization** - Built-in cartoon effect
-4. **Detail Enhancement** - Enhances image details
-5. **Oil Painting** - Multiple bilateral filters
+### Creating Blank Images
+```python
+frame = np.ones((HEIGHT, WIDTH, 3), dtype=np.uint8) * 255  # White background
+```
 
 ## How to Run
 
 ```bash
-python cartoonification.py
+python dinogame.py
 ```
 
-The script will display both original and cartoonified images and save the cartoon versions.
-
-## Parameters to Experiment With
-
-- Bilateral filter: diameter, sigma_color, sigma_space
-- Median blur: kernel size
-- Adaptive threshold: block size, constant
+Press SPACE to jump over obstacles and try to get the highest score!

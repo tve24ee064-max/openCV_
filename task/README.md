@@ -7,8 +7,8 @@
 - Displaying images with `cv2.imshow()`
 - Saving images with `cv2.imwrite()`
 - Accessing and manipulating individual pixels
-- Working with color channels (BGR)
-- Creating patterns programmatically (chessboard pattern)
+- Working with color channels
+- Creating patterns (chessboard pattern)
 
 ## Files
 
